@@ -7,19 +7,24 @@ class LinkedList:
     def __init__(self):
         self.head = None
 
-    def add_to_end(self, data):
-        new_node = Node(data)
+    def add_nodes(self, *args):
+        child_head, child_tail = None, None
+        for data in args:
+            new_node = Node(data)
+            if not child_head:
+                child_head = child_tail = new_node
+            else:
+                child_tail.next = new_node
+                child_tail = new_node
+                
         if not self.head:
-            self.head = new_node
+            self.head = child_head
             return
-        current = self.head
-        while current.next:
-            current = current.next
-        current.next = new_node
 
-    def add_multiple_nodes(self, data_list):
-        for data in data_list:
-            self.add_to_end(data)
+        tail = self.head
+        while tail.next:
+            tail = tail.next
+        tail.next = child_head
 
     def remove_from_end(self):
         if not self.head:
@@ -64,7 +69,7 @@ class LinkedList:
 
 if __name__ == '__main__':
     linked_list = LinkedList()
-    linked_list.add_multiple_nodes([1, 2, 3])
+    linked_list.add_nodes(1, 2, 3)
     linked_list.print_all()  # Expected: 1 -> 2 -> 3
 
     linked_list.remove_from_end()
@@ -77,13 +82,13 @@ if __name__ == '__main__':
     linked_list.remove_node(linked_list.head)
     linked_list.print_all() # Expected:
 
-    linked_list.add_to_end(4)
-    linked_list.add_to_end(5)
-    linked_list.add_to_end(6)
+    linked_list.add_nodes(4)
+    linked_list.add_nodes(5)
+    linked_list.add_nodes(6)
 
     node_to_remove = linked_list.head.next.next # Node with data 6
     linked_list.remove_node(node_to_remove)
     linked_list.print_all() # Expected 4 -> 5
 
-    linked_list.add_multiple_nodes([7, 8, 9])
+    linked_list.add_nodes(7, 8, 9)
     linked_list.print_all()  # Expected 4 -> 5 -> 7 -> 8 -> 9
